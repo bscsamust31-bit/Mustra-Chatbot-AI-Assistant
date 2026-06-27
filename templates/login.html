@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Interactive Login & Signup</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(45deg, #1c1c1c, #333);
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo {
+      height: 35vh;
+      animation: logoFloat 4s ease-in-out infinite, logoFadeIn 2s forwards;
+      opacity: 0;
+      transform: translateZ(-200px) scale(0.8);
+    }
+
+    @keyframes logoFloat {
+      0%, 100% {
+        transform: translateY(0) translateZ(0) scale(1);
+      }
+      50% {
+        transform: translateY(-20px) translateZ(0) scale(1.05);
+      }
+    }
+
+    @keyframes logoFadeIn {
+      to {
+        opacity: 1;
+        transform: translateZ(0) scale(1);
+      }
+    }
+
+    .chat-box {
+      background-color: black;
+      color: white;
+      padding: 40px 80px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 30px;
+      margin-top: 20px;
+      border: 2px solid #00bfff;
+      box-shadow: 0 0 10px #00bfff, 0 0 20px #00bfff;
+      animation: glowBorder 2s infinite ease-in-out, bounceIn 1s ease-out;
+      position: relative;
+      z-index: 2;
+    }
+
+    @keyframes glowBorder {
+      0%, 100% {
+        box-shadow: 0 0 10px #00bfff;
+      }
+      50% {
+        box-shadow: 0 0 20px #00bfff;
+      }
+    }
+
+    @keyframes bounceIn {
+      0% { transform: scale(0.5); opacity: 0; }
+      60% { transform: scale(1.1); opacity: 1; }
+      100% { transform: scale(1); }
+    }
+
+    .typewriter {
+      color: white;
+      font-size: 18px;
+      text-align: center;
+      margin-top: 10px;
+      overflow: hidden;
+      border-right: .15em solid #00bfff;
+      white-space: nowrap;
+      animation: typing 4s steps(40, end), blink 0.75s step-end infinite;
+    }
+
+    @keyframes typing {
+      from { width: 0 }
+      to { width: 100% }
+    }
+
+    @keyframes blink {
+      50% { border-color: transparent }
+    }
+
+    .form-container {
+      background-color: #000;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 15px 25px rgba(0, 255, 255, 0.1);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      animation: slideIn 1s ease-out;
+      color: white;
+      position: relative;
+      z-index: 2;
+    }
+
+    .form-container:hover {
+      border: 2px solid red;
+      transform: rotateY(10deg) rotateX(5deg);
+      transition: transform 0.5s ease-in-out;
+    }
+
+    .form-container h2 {
+      color: white;
+      text-align: center;
+    }
+
+    input, button {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 10px;
+      border: 1px solid #555;
+      font-size: 16px;
+      transition: 0.3s;
+      text-align: center;
+    }
+
+    input:hover, button:hover {
+      border: 1px solid red;
+      background-color: #111;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    .switch-form {
+      text-align: center;
+      margin-top: 15px;
+    }
+
+    .switch-form a {
+      color: #00bfff;
+      text-decoration: none;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateY(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    /* Sparkles */
+    .sparkle {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background: #0ff;
+      border-radius: 50%;
+      animation: sparkle 2s infinite linear;
+      pointer-events: none;
+    }
+
+    @keyframes sparkle {
+      from {
+        transform: scale(0) translateY(0);
+        opacity: 1;
+      }
+      to {
+        transform: scale(1.5) translateY(-100px);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Logo -->
+  <img src="{{ url_for('static', filename='logo-dark.png') }}" alt="University Logo" class="logo" />
+
+  <!-- Chat button -->
+  <div id="chat-box" class="chat-box" onclick="playClick(); showForm();">
+    Chat with Mustra
+  </div>
+
+  <!-- Typewriter welcome -->
+  <div class="typewriter">Your Personalized MUST Assistant Awaits...</div>
+
+  <!-- Form container -->
+  <div class="form-container" id="form-container">
+    <div id="login-form">
+      <h2>Login</h2>
+      <form action="/login" method="POST">
+        <input type="text" name="username" placeholder="Username" required onmouseover="playHover()"/>
+        <input type="password" name="password" placeholder="Password" required onmouseover="playHover()"/>
+        <button type="submit" onmouseover="playHover()">Login</button>
+      </form>
+      <div class="switch-form">
+        <p>Don't have an account? <a href="#" onclick="switchToSignup()">Sign Up</a></p>
+      </div>
+    </div>
+
+    <div id="signup-form" style="display: none;">
+      <h2>Sign Up</h2>
+      <form action="/signup" method="POST">
+        <input type="text" name="username" placeholder="Username" required onmouseover="playHover()"/>
+        <input type="password" name="password" placeholder="Password" required onmouseover="playHover()"/>
+        <button type="submit" onmouseover="playHover()">Sign Up</button>
+      </form>
+      <div class="switch-form">
+        <p>Already have an account? <a href="#" onclick="switchToLogin()">Login</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sounds -->
+  <audio id="click-sound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_c3950ec4d1.mp3"></audio>
+  <audio id="hover-sound" src="https://cdn.pixabay.com/audio/2022/10/26/audio_27e276d6e7.mp3"></audio>
+
+  <!-- JS for effects -->
+  <script>
+    function playClick() {
+      document.getElementById("click-sound").play();
+    }
+
+    function playHover() {
+      document.getElementById("hover-sound").play();
+    }
+
+    function switchToSignup() {
+      document.getElementById('login-form').style.display = 'none';
+      document.getElementById('signup-form').style.display = 'block';
+    }
+
+    function switchToLogin() {
+      document.getElementById('signup-form').style.display = 'none';
+      document.getElementById('login-form').style.display = 'block';
+    }
+
+    function showForm() {
+      document.getElementById('chat-box').style.display = 'none';
+      document.querySelector('.form-container').style.display = 'flex';
+      for (let i = 0; i < 20; i++) createSparkle();
+    }
+
+    function createSparkle() {
+      const sparkle = document.createElement('div');
+      sparkle.classList.add('sparkle');
+      sparkle.style.left = Math.random() * window.innerWidth + 'px';
+      sparkle.style.top = window.innerHeight + 'px';
+      document.body.appendChild(sparkle);
+      setTimeout(() => sparkle.remove(), 2000);
+    }
+  </script>
+
+</body>
+</html>
