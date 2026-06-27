@@ -3,7 +3,7 @@
 # 🤖 MUSTRA CHATBOT
 ## **Multan University of Science and Technology**
 
-![MUST Logo](https://upload.wikimedia.org/wikipedia/en/thumb/a/a5/MUST_Logo.png/200px-MUST_Logo.png)
+![MUST Logo](https://virtualtour.multanust.edu.pk/careers)
 
 > **An intelligent, multilingual university chatbot powered by Semantic Search, FAISS, and Flask**
 
